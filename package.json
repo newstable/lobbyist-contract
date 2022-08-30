@@ -1,0 +1,41 @@
+{
+    "name": "hadhat",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "dependencies": {
+        "@openzeppelin/contracts": "^4.5.0",
+        "bs58": "^5.0.0",
+        "dotenv": "^10.0.0",
+        "erc721a": "^4.2.0",
+        "fs": "0.0.1-security",
+        "hardhat": "^2.6.1",
+        "ipfs-api": "^26.1.2",
+        "ipfs-http-client": "^56.0.1",
+        "nodemon": "^2.0.15"
+    },
+    "devDependencies": {
+        "@nomiclabs/hardhat-ethers": "^2.0.2",
+        "@nomiclabs/hardhat-etherscan": "^2.1.5",
+        "@nomiclabs/hardhat-waffle": "^2.0.1",
+        "chai": "^4.3.4",
+        "ethereum-waffle": "^3.4.0",
+        "ethers": "^5.4.5"
+    },
+    "scripts": {
+        "test": "npx hardhat test",
+        "deploy": "npx hardhat run --network fantom_test  scripts/deploy.js",
+        "deploy_fantom": "npx hardhat run --network fantom  scripts/deploy.js",
+        "deploy_matic": "npx hardhat run --network matic  scripts/deploy.js",
+        "deploy_matictest": "npx hardhat run --network matictest  scripts/deploy.js",
+        "deploy_icicb": "npx hardhat run --network ICICB scripts/deploy.js",
+        "deploy_icicbtest": "npx hardhat run --network ICICBtestnet scripts/deploy.js",
+        "deploy_local": "npx hardhat run --network localhost  scripts/deploy.js",
+        "deploy_ganache": "npx hardhat run --network ganache  scripts/deploy.js",
+        "checkBalance": "npx hardhat check-balance --network fantom_test",
+        "deploy_image": "node scripts/ipfs/upload_ipfs_image.js",
+        "deploy_metadata": "node scripts/ipfs/upload_metadata.js"
+    },
+    "author": "",
+    "license": "ISC"
+}
