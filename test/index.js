@@ -49,6 +49,7 @@ describe("Pool deploy and test", () => {
                     description: "this is test pool",
                     platformType: "QiDAO",
                     outcome: "yes",
+                    endTime: "1",
                     rewardCurrency: TestToken.address,
                     rewardAmount: toBigNum("1000000"),
                     creator: owner.address,

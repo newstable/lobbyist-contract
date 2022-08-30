@@ -9,8 +9,8 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "hardhat/console.sol";
 
 contract Pool is Ownable {
-    event PoolCreated(uint id, PoolData _pooldata);
-    event PoolClosed(uint id);
+    event PoolCreated(uint256 id, PoolData _pooldata);
+    event PoolClosed(uint256 id);
 
     struct PoolData {
         string proposalId;
@@ -18,38 +18,39 @@ contract Pool is Ownable {
         string description;
         string platformType;
         string outcome;
+        string endTime;
         address rewardCurrency;
-        uint rewardAmount;
+        uint256 rewardAmount;
         address creator;
         bool isClosed;
-        uint paybackAmount;
+        uint256 paybackAmount;
     }
 
     // pool data
-    mapping(uint => PoolData) public poolDatas;
-    uint public poolCount;
+    mapping(uint256 => PoolData) public poolDatas;
+    uint256 public poolCount;
     // proposal pool created info
     mapping(string => bool) public isCreated;
 
     // user reward Info
-    mapping(address => mapping(uint => uint)) public rewardInfos;
+    mapping(address => mapping(uint256 => uint256)) public rewardInfos;
 
     // admin info
     address public admin;
-    uint public fee; // fee*1000000
+    uint256 public fee; // fee*1000000
 
     modifier onlyAdmin() {
         require(msg.sender == admin, "Invalid admin");
         _;
     }
 
-    constructor(address _admin, uint _fee) {
+    constructor(address _admin, uint256 _fee) {
         admin = _admin;
         require(_fee < 1000000, "Invalide fee");
         fee = _fee;
     }
 
-    function setAdminSetting(address _admin, uint _fee) external onlyOwner {
+    function setAdminSetting(address _admin, uint256 _fee) external onlyOwner {
         admin = _admin;
         require(_fee < 1000000, "Invalide fee");
         fee = _fee;
@@ -81,7 +82,7 @@ contract Pool is Ownable {
         poolCount++;
     }
 
-    function addReward(uint id, uint amount) external {
+    function addReward(uint256 id, uint256 amount) external {
         require(poolCount > id, "invalid id");
         IERC20(poolDatas[id].rewardCurrency).transferFrom(
             msg.sender,
@@ -92,15 +93,15 @@ contract Pool is Ownable {
     }
 
     function closePool(
-        uint id,
+        uint256 id,
         address[] memory voters,
-        uint[] memory voteAmounts
+        uint256[] memory voteAmounts
     ) external onlyAdmin {
         require(poolCount > id, "invalid id");
         require(voters.length == voteAmounts.length, "Invalid parameter");
         require(poolDatas[id].isClosed == false, "Already created");
-        uint totalVoteAmounts = 0;
-        for (uint i = 0; i < voteAmounts.length; i++) {
+        uint256 totalVoteAmounts = 0;
+        for (uint256 i = 0; i < voteAmounts.length; i++) {
             totalVoteAmounts += voteAmounts[i];
         }
 
@@ -112,9 +113,9 @@ contract Pool is Ownable {
         }
 
         // get reward amount per vote
-        uint rewardPerVote = poolDatas[id].rewardAmount / totalVoteAmounts;
+        uint256 rewardPerVote = poolDatas[id].rewardAmount / totalVoteAmounts;
 
-        for (uint i = 0; i < voters.length; i++) {
+        for (uint256 i = 0; i < voters.length; i++) {
             rewardInfos[voters[i]][id] = voteAmounts[i] * rewardPerVote;
         }
         poolDatas[id].isClosed = true;
@@ -122,13 +123,13 @@ contract Pool is Ownable {
         emit PoolClosed(id);
     }
 
-    function claim(uint id) external {
-        uint rewardAmount = rewardInfos[msg.sender][id];
+    function claim(uint256 id) external {
+        uint256 rewardAmount = rewardInfos[msg.sender][id];
         IERC20(poolDatas[id].rewardCurrency).transfer(msg.sender, rewardAmount);
         rewardInfos[msg.sender][id] = 0;
     }
 
-    function claimPayBack(uint id) external {
+    function claimPayBack(uint256 id) external {
         require(msg.sender == poolDatas[id].creator, "Only creator can claim");
         IERC20(poolDatas[id].rewardCurrency).transfer(
             msg.sender,

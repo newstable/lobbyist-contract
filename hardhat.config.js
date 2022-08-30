@@ -75,19 +75,10 @@ module.exports = {
     etherscan: {
         // Your API key for Etherscan
         // Obtain one at https://etherscan.io/
-        apiKey: "CGPDXGVTQXTQVQV4JZ9CTTXUE21IXAGKVB",
+        apiKey: "DNUKKUV8S63T1SE3S1IKFFQRHFUS1VQYM9",
     },
     solidity: {
         compilers: [
-            {
-                version: "0.6.12",
-                settings: {
-                    optimizer: {
-                        enabled: true,
-                        runs: 200,
-                    },
-                },
-            },
             {
                 version: "0.8.4",
                 settings: {
@@ -97,7 +88,16 @@ module.exports = {
                     },
                 },
             },
-        ],
+            {
+                version: "0.6.12",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 200,
+                    },
+                },
+            }
+        ]
     },
     mocha: {
         timeout: 200000,
