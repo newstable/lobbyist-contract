@@ -23,7 +23,6 @@ contract Pool is Ownable {
         uint256 rewardAmount;
         address creator;
         bool isClosed;
-        uint256 paybackAmount;
     }
 
     // pool data
@@ -75,7 +74,6 @@ contract Pool is Ownable {
         _pooldata.rewardAmount -= (_pooldata.rewardAmount * fee) / 1000000;
 
         _pooldata.isClosed = false;
-        _pooldata.paybackAmount = 0;
         poolDatas[poolCount] = _pooldata;
 
         emit PoolCreated(poolCount, _pooldata);
@@ -99,14 +97,17 @@ contract Pool is Ownable {
     ) external onlyAdmin {
         require(poolCount > id, "invalid id");
         require(voters.length == voteAmounts.length, "Invalid parameter");
-        require(poolDatas[id].isClosed == false, "Already created");
+        require(poolDatas[id].isClosed == false, "Already closed");
         uint256 totalVoteAmounts = 0;
         for (uint256 i = 0; i < voteAmounts.length; i++) {
             totalVoteAmounts += voteAmounts[i];
         }
 
         if (totalVoteAmounts == 0) {
-            poolDatas[id].paybackAmount = poolDatas[id].rewardAmount;
+            IERC20(poolDatas[id].rewardCurrency).transfer(
+                poolDatas[id].creator,
+                poolDatas[id].rewardAmount
+            );
             poolDatas[id].isClosed = true;
             emit PoolClosed(id);
             return;
@@ -127,14 +128,5 @@ contract Pool is Ownable {
         uint256 rewardAmount = rewardInfos[msg.sender][id];
         IERC20(poolDatas[id].rewardCurrency).transfer(msg.sender, rewardAmount);
         rewardInfos[msg.sender][id] = 0;
-    }
-
-    function claimPayBack(uint256 id) external {
-        require(msg.sender == poolDatas[id].creator, "Only creator can claim");
-        IERC20(poolDatas[id].rewardCurrency).transfer(
-            msg.sender,
-            poolDatas[id].paybackAmount
-        );
-        poolDatas[id].paybackAmount = 0;
     }
 }
