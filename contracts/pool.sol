@@ -18,7 +18,6 @@ contract Pool is Ownable {
         string description;
         string platformType;
         string outcome;
-        string endTime;
         address rewardCurrency;
         uint256 rewardAmount;
         address creator;

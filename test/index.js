@@ -49,12 +49,10 @@ describe("Pool deploy and test", () => {
                     description: "this is test pool",
                     platformType: "QiDAO",
                     outcome: "yes",
-                    endTime: "1",
                     rewardCurrency: TestToken.address,
                     rewardAmount: toBigNum("1000000"),
                     creator: owner.address,
                     isClosed: false,
-                    paybackAmount: toBigNum("0")
                 }
 
                 tx = await Pool.createPool(pooldata);
@@ -64,7 +62,7 @@ describe("Pool deploy and test", () => {
             it("closePool", async function () {
                 const voters = [owner.address, userWallet.address];
                 const voteAmounts = [toBigNum("100", 0), toBigNum("300", 0)]
-                var tx = await Pool.closePool("0", voters, voteAmounts);
+                var tx = await Pool.closePool("0x00", voters, voteAmounts);
                 await tx.wait();
             })
 
