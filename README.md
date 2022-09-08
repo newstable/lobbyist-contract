@@ -1,4 +1,4 @@
-### DAO Briebe contract deployment 
+### Lobbyist contract deployment 
 - config
 add private key to .env file
 ```javascript
