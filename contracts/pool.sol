@@ -86,6 +86,10 @@ contract Pool is Ownable {
             address(this),
             amount
         );
+        IERC20(poolDatas[id].rewardCurrency).transfer(
+            owner(),
+            (amount * fee) / 1000000
+        );
         poolDatas[poolCount].rewardAmount += amount;
     }
 
