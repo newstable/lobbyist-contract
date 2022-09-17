@@ -55,6 +55,10 @@ module.exports = {
             url: "https://bsc-dataseed1.ninicoin.io/",
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
         },
+        bsctest: {
+            url: "https://data-seed-prebsc-1-s1.binance.org:8545",
+            accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
+        },
         matic: {
             url: "https://rpc-mainnet.matic.quiknode.pro",
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
@@ -90,6 +94,15 @@ module.exports = {
             },
             {
                 version: "0.6.12",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 200,
+                    },
+                },
+            },
+            {
+                version: "0.8.7",
                 settings: {
                     optimizer: {
                         enabled: true,
