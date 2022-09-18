@@ -117,10 +117,13 @@ contract Pool is Ownable {
         }
 
         // get reward amount per vote
-        uint256 rewardPerVote = poolDatas[id].rewardAmount / totalVoteAmounts;
+        uint256 rewardPerVote = (poolDatas[id].rewardAmount * 1e18) /
+            totalVoteAmounts;
 
         for (uint256 i = 0; i < voters.length; i++) {
-            rewardInfos[voters[i]][id] = voteAmounts[i] * rewardPerVote;
+            rewardInfos[voters[i]][id] =
+                (voteAmounts[i] * rewardPerVote) /
+                1e18;
         }
         poolDatas[id].isClosed = true;
 
