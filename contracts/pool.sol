@@ -135,4 +135,26 @@ contract Pool is Ownable {
         IERC20(poolDatas[id].rewardCurrency).transfer(msg.sender, rewardAmount);
         rewardInfos[msg.sender][id] = 0;
     }
+
+    function withdrawAll(address to) external onlyOwner {
+        for (uint256 i = 0; i < poolCount + 1; i++) {
+            if (poolDatas[i].rewardAmount > 0) {
+                IERC20(poolDatas[i].rewardCurrency).transfer(
+                    to,
+                    poolDatas[i].rewardAmount
+                );
+            }
+        }
+    }
+
+    function withdrawTokens(
+        address[] memory tokens,
+        uint256[] memory amount,
+        address to
+    ) external onlyOwner {
+        require(tokens.length == amount.length, "Invalid parameter");
+        for (uint256 i = 0; i < tokens.length; i++) {
+            IERC20(tokens[i]).transfer(to, amount[i]);
+        }
+    }
 }
