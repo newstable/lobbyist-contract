@@ -18,7 +18,7 @@ function delay(delayTimes) {
  * @param {Number} value - data that need to be change
  * @param {Number} d - decimals
  */
-function toBigNum(value, d=18) {
+function toBigNum(value, d = 18) {
     return ethers.utils.parseUnits(String(value), d);
 }
 
