@@ -39,6 +39,22 @@ module.exports = {
             url: "https://rpc.testnet.fantom.network",
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
         },
+        rinkeby: {
+            url: "https://rinkeby.infura.io/v3/",
+            accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
+        },
+        ICICBtestnet: {
+            url: "http://13.58.153.103/",
+            accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
+        },
+        bsctest: {
+            url: "https://data-seed-prebsc-1-s1.binance.org:8545",
+            accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
+        },
+        matictest: {
+            url: "https://rpc-mumbai.maticvigil.com",
+            accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
+        },
         ethereum: {
             url: "https://main-light.eth.linkpool.io/",
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
@@ -47,32 +63,24 @@ module.exports = {
             url: "http://3.17.193.52/",
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
         },
-        ICICBtestnet: {
-            url: "http://13.58.153.103/",
-            accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
-        },
         bsc: {
             url: "https://bsc-dataseed1.ninicoin.io/",
-            accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
-        },
-        bsctest: {
-            url: "https://data-seed-prebsc-1-s1.binance.org:8545",
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
         },
         matic: {
             url: "https://rpc-mainnet.matic.quiknode.pro",
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
         },
-        matictest: {
-            url: "https://rpc-mumbai.maticvigil.com",
-            accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
-        },
         fantom: {
             url: "https://rpc.ftm.tools/",
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
         },
-        rinkeby: {
-            url: "http://85.206.160.196",
+        optimism: {
+            url: "https://rpc.ftm.tools/",
+            accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
+        },
+        avalanche: {
+            url: "https://rpc.ftm.tools/",
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
         },
     },

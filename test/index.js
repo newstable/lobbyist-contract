@@ -37,51 +37,51 @@ describe("Pool deploy and test", () => {
         });
     });
 
-    if (!isDeploy) {
-        describe("Pool test", function () {
-            it("createPool", async function () {
-                var tx = await TestToken.approve(Pool.address, toBigNum("1000000"));
-                await tx.wait();
+    // if (!isDeploy) {
+    //     describe("Pool test", function () {
+    //         it("createPool", async function () {
+    //             var tx = await TestToken.approve(Pool.address, toBigNum("1000000"));
+    //             await tx.wait();
 
-                const pooldata = {
-                    proposalId: "test",
-                    name: "test",
-                    description: "this is test pool",
-                    platformType: "QiDAO",
-                    outcome: "yes",
-                    rewardCurrency: TestToken.address,
-                    rewardAmount: toBigNum("1000000"),
-                    creator: owner.address,
-                    isClosed: false,
-                }
+    //             const pooldata = {
+    //                 proposalId: "test",
+    //                 name: "test",
+    //                 description: "this is test pool",
+    //                 platformType: "QiDAO",
+    //                 outcome: "yes",
+    //                 rewardCurrency: TestToken.address,
+    //                 rewardAmount: toBigNum("1000000"),
+    //                 creator: owner.address,
+    //                 isClosed: false,
+    //             }
 
-                tx = await Pool.createPool(pooldata);
-                await tx.wait();
-            })
+    //             tx = await Pool.createPool(pooldata);
+    //             await tx.wait();
+    //         })
 
-            it("closePool", async function () {
-                const voters = [owner.address, userWallet.address];
-                const voteAmounts = [toBigNum("100", 0), toBigNum("300", 0)]
-                var tx = await Pool.closePool("0x00", voters, voteAmounts);
-                await tx.wait();
-            })
+    //         it("closePool", async function () {
+    //             const voters = [owner.address, userWallet.address];
+    //             const voteAmounts = [toBigNum("100", 0), toBigNum("300", 0)]
+    //             var tx = await Pool.closePool("0x00", voters, voteAmounts);
+    //             await tx.wait();
+    //         })
 
-            it("claim", async function () {
-                let TestTokenBalance1 = await TestToken.balanceOf(owner.address);
-                expect(TestTokenBalance1).to.be.equal((toBigNum(10 ** 12).sub(toBigNum(1000000)).add(toBigNum(1000000 * 0.025))));
+    //         it("claim", async function () {
+    //             let TestTokenBalance1 = await TestToken.balanceOf(owner.address);
+    //             expect(TestTokenBalance1).to.be.equal((toBigNum(10 ** 12).sub(toBigNum(1000000)).add(toBigNum(1000000 * 0.025))));
 
-                let userInfo = await Pool.rewardInfos(owner.address, "0");
-                expect(userInfo).to.be.equal(toBigNum(1000000 * 0.975).div("4"));
-                var tx = await Pool.claim("0");
-                await tx.wait();
-                userInfo = await Pool.rewardInfos(owner.address, "0");
-                expect(userInfo).to.be.equal(toBigNum(0));
+    //             let userInfo = await Pool.rewardInfos(owner.address, "0");
+    //             expect(userInfo).to.be.equal(toBigNum(1000000 * 0.975).div("4"));
+    //             var tx = await Pool.claim("0");
+    //             await tx.wait();
+    //             userInfo = await Pool.rewardInfos(owner.address, "0");
+    //             expect(userInfo).to.be.equal(toBigNum(0));
 
-                let TestTokenBalance2 = await TestToken.balanceOf(owner.address);
-                expect(TestTokenBalance2.sub(TestTokenBalance1)).to.be.equal(toBigNum(1000000 * 0.975).div(4))
-            })
-        });
-    }
+    //             let TestTokenBalance2 = await TestToken.balanceOf(owner.address);
+    //             expect(TestTokenBalance2.sub(TestTokenBalance1)).to.be.equal(toBigNum(1000000 * 0.975).div(4))
+    //         })
+    //     });
+    // }
 
     describe("Save contracts", function () {
         it("save abis", async function () {
