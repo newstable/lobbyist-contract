@@ -187,7 +187,6 @@ contract Variable is Ownable {
         string platformType;
         string outcome;
         address rewardCurrency;
-        uint256 minRewardAmount;
         uint256 maxRewardAmount;
         uint256 minVotes;
         uint256 targetVotes;
