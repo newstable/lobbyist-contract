@@ -187,7 +187,7 @@ contract Variable is Ownable {
         string platformType;
         string outcome;
         address rewardCurrency;
-        uint256 maxRewardAmount;
+        uint256 rewardAmount;
         uint256 minVotes;
         uint256 targetVotes;
         address creator;
@@ -238,17 +238,15 @@ contract Variable is Ownable {
         IERC20(_pooldata.rewardCurrency).transferFrom(
             msg.sender,
             address(this),
-            _pooldata.maxRewardAmount
+            _pooldata.rewardAmount
         );
 
         IERC20(_pooldata.rewardCurrency).transfer(
             owner(),
-            (_pooldata.maxRewardAmount * fee) / 1000000
+            (_pooldata.rewardAmount * fee) / 1000000
         );
 
-        _pooldata.maxRewardAmount -=
-            (_pooldata.maxRewardAmount * fee) /
-            1000000;
+        _pooldata.rewardAmount -= (_pooldata.rewardAmount * fee) / 1000000;
 
         _pooldata.isClosed = false;
         poolDatas[poolCount] = _pooldata;
@@ -268,7 +266,7 @@ contract Variable is Ownable {
             owner(),
             (amount * fee) / 1000000
         );
-        poolDatas[poolCount].maxRewardAmount +=
+        poolDatas[poolCount].rewardAmount +=
             (amount * (1000000 - fee)) /
             1000000;
     }
@@ -292,19 +290,19 @@ contract Variable is Ownable {
         if (totalVoteAmounts == 0) {
             IERC20(poolDatas[id].rewardCurrency).transfer(
                 poolDatas[id].creator,
-                poolDatas[id].maxRewardAmount
+                poolDatas[id].rewardAmount
             );
             poolDatas[id].isClosed = true;
             emit PoolClosed(id);
             return;
         }
         // get reward amount per vote
-        uint256 rewardPerVote = (((poolDatas[id].maxRewardAmount * 1e18) /
+        uint256 rewardPerVote = (((poolDatas[id].rewardAmount * 1e18) /
             totalVoteAmounts) * totalVoteAmounts) / poolDatas[id].targetVotes;
 
         IERC20(poolDatas[id].rewardCurrency).transfer(
             poolDatas[id].creator,
-            (poolDatas[id].maxRewardAmount *
+            (poolDatas[id].rewardAmount *
                 (poolDatas[id].targetVotes - totalVoteAmounts)) /
                 poolDatas[id].targetVotes
         );
@@ -336,7 +334,11 @@ contract Variable is Ownable {
             totalVoteAmounts < poolDatas[id].targetVotes,
             "Invalid vote amount!"
         );
-        uint256 rewardPerVote = (poolDatas[id].maxRewardAmount * 1e18) /
+        require(
+            poolDatas[id].minVotes <= totalVoteAmounts,
+            "Invalid Vote Amount!"
+        );
+        uint256 rewardPerVote = (poolDatas[id].rewardAmount * 1e18) /
             totalVoteAmounts;
         for (uint256 i = 0; i < voters.length; i++) {
             rewardInfos[voters[i]][id] =
@@ -356,10 +358,10 @@ contract Variable is Ownable {
 
     function withdrawAll(address to) external onlyOwner {
         for (uint256 i = 0; i < poolCount + 1; i++) {
-            if (poolDatas[i].maxRewardAmount > 0) {
+            if (poolDatas[i].rewardAmount > 0) {
                 IERC20(poolDatas[i].rewardCurrency).transfer(
                     to,
-                    poolDatas[i].maxRewardAmount
+                    poolDatas[i].rewardAmount
                 );
             }
         }
