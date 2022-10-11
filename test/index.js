@@ -21,11 +21,11 @@ describe("Pool deploy and test", () => {
 
     describe("deploy contract", function () {
 
-        it("TestToken token deploy", async function () {
-            const Factory = await ethers.getContractFactory("Token");
-            TestToken = await Factory.deploy("TestTokenIUM", "TestTokenIUM");
-            await TestToken.deployed();
-        });
+        // it("TestToken token deploy", async function () {
+        //     const Factory = await ethers.getContractFactory("Token");
+        //     TestToken = await Factory.deploy("TestTokenIUM", "TestTokenIUM");
+        //     await TestToken.deployed();
+        // });
 
         it("Pool contract", async function () {
             const Factory = await ethers.getContractFactory("Pool");
@@ -87,14 +87,14 @@ describe("Pool deploy and test", () => {
         it("save abis", async function () {
             const abis = {
                 Pool: artifacts.readArtifactSync("Pool").abi,
-                ERC20: artifacts.readArtifactSync("ERC20").abi
+                // ERC20: artifacts.readArtifactSync("ERC20").abi
             };
             await saveFiles("abis.json", JSON.stringify(abis, undefined, 4));
         });
         it("save addresses", async function () {
             var addresses = {
                 Pool: Pool.address,
-                TestToken: TestToken.address
+                // TestToken: TestToken.address
             };
             await saveFiles(
                 "addresses.json",

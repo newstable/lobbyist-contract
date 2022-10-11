@@ -56,7 +56,7 @@ module.exports = {
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
         },
         ethereum: {
-            url: "https://main-light.eth.linkpool.io/",
+            url: "https://eth-mainnet.nodereal.io/v1/1659dfb40aa24bbb8153a677b98064d7",
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
         },
         ICICB: {
@@ -76,13 +76,17 @@ module.exports = {
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
         },
         optimism: {
-            url: "https://rpc.ftm.tools/",
+            url: "https://mainnet.optimism.io",
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
         },
         avalanche: {
-            url: "https://rpc.ftm.tools/",
+            url: "https://api.avax.network/ext/bc/C/rpc",
             accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
         },
+        arbitrum: {
+            url: "https://arb1.arbitrum.io/rpc",
+            accounts: [process.env.PRIVATEKEY, process.env.PRIVATEKEY1],
+        }
     },
     etherscan: {
         // Your API key for Etherscan
