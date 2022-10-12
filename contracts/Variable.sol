@@ -171,7 +171,7 @@ abstract contract ReentrancyGuard {
     }
 }
 
-contract Pool is Ownable {
+contract Variable is Ownable {
     event PoolCreated(uint256 id, PoolData _pooldata);
     event PoolClosed(uint256 id);
 

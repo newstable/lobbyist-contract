@@ -28,7 +28,7 @@ describe("Pool deploy and test", () => {
         // });
 
         it("Pool contract", async function () {
-            const Factory = await ethers.getContractFactory("Pool");
+            const Factory = await ethers.getContractFactory("Variable");
             Pool = await Factory.deploy(
                 owner.address,
                 toBigNum("25000", 0) //2.5%
