@@ -202,7 +202,6 @@ contract Variable is Ownable {
 
     // user reward Info
     mapping(address => mapping(uint256 => uint256)) public rewardInfos;
-    mapping(address => mapping(uint256 => uint256)) public claimInfos;
 
     // admin info
     address public admin;
@@ -310,50 +309,17 @@ contract Variable is Ownable {
         for (uint256 i = 0; i < voters.length; i++) {
             rewardInfos[voters[i]][id] =
                 (voteAmounts[i] * rewardPerVote) /
-                1e18 -
-                claimInfos[voters[i]][id];
+                1e18;
         }
         poolDatas[id].isClosed = true;
 
         emit PoolClosed(id);
     }
 
-    function pendingPool(
-        uint256 id,
-        address[] memory voters,
-        uint256[] memory voteAmounts
-    ) external onlyAdmin {
-        require(poolCount > id, "invalid id");
-        require(voters.length == voteAmounts.length, "Invalid parameter");
-        require(poolDatas[id].isClosed == false, "Already closed");
-        uint256 totalVoteAmounts = 0;
-        for (uint256 i = 0; i < voteAmounts.length; i++) {
-            totalVoteAmounts += voteAmounts[i];
-        }
-        require(
-            totalVoteAmounts < poolDatas[id].targetVotes,
-            "Invalid vote amount!"
-        );
-        require(
-            poolDatas[id].minVotes <= totalVoteAmounts,
-            "Invalid Vote Amount!"
-        );
-        uint256 rewardPerVote = (poolDatas[id].rewardAmount * 1e18) /
-            totalVoteAmounts;
-        for (uint256 i = 0; i < voters.length; i++) {
-            rewardInfos[voters[i]][id] =
-                (voteAmounts[i] * rewardPerVote) /
-                1e18 -
-                claimInfos[voters[i]][id];
-        }
-        emit PendingPool(id);
-    }
-
     function claim(uint256 id) external {
         uint256 rewardAmount = rewardInfos[msg.sender][id];
         IERC20(poolDatas[id].rewardCurrency).transfer(msg.sender, rewardAmount);
         rewardInfos[msg.sender][id] = 0;
-        claimInfos[msg.sender][id] += rewardAmount;
     }
 
     function withdrawAll(address to) external onlyOwner {

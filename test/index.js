@@ -86,7 +86,7 @@ describe("Pool deploy and test", () => {
     describe("Save contracts", function () {
         it("save abis", async function () {
             const abis = {
-                Pool: artifacts.readArtifactSync("Pool").abi,
+                Pool: artifacts.readArtifactSync("Variable").abi,
                 // ERC20: artifacts.readArtifactSync("ERC20").abi
             };
             await saveFiles("abis.json", JSON.stringify(abis, undefined, 4));
