@@ -229,6 +229,7 @@ contract Variable is Ownable, ReentrancyGuard {
             _pooldata.targetVotes > _pooldata.minVotes,
             "target vote must bigger than min votes!"
         );
+        // check msg.value
         require(msg.value == 0.01 * 1e18, "The msg.value is less than 0.01");
         require(
             rewardCurrencys[_pooldata.rewardCurrency] == true,

@@ -224,6 +224,7 @@ contract Pool is Ownable, ReentrancyGuard {
             !isCreated[_pooldata.proposalId],
             "pool already created for proposal"
         );
+        // check msg.value
         require(msg.value == 0.01 * 1e18, "The msg.value is less than 0.01");
         require(
             rewardCurrencys[_pooldata.rewardCurrency] == true,
