@@ -194,7 +194,8 @@ contract Variable is Ownable, ReentrancyGuard {
     uint256 public poolCount;
     // proposal pool created info
     mapping(string => bool) public isCreated;
-
+    // rewardcurrency type
+    mapping(address => bool) public rewardCurrencys;
     // user reward Info
     mapping(address => mapping(uint256 => uint256)) public rewardInfos;
 
@@ -229,6 +230,10 @@ contract Variable is Ownable, ReentrancyGuard {
             "target vote must bigger than min votes!"
         );
         require(msg.value == 0.01 * 1e18, "The msg.value is less than 0.01");
+        require(
+            rewardCurrencys[_pooldata.rewardCurrency] == true,
+            "unregistered Currency"
+        );
         payable(admin).transfer(msg.value);
         IERC20(_pooldata.rewardCurrency).transferFrom(
             msg.sender,
@@ -316,5 +321,12 @@ contract Variable is Ownable, ReentrancyGuard {
         uint256 rewardAmount = rewardInfos[msg.sender][id];
         IERC20(poolDatas[id].rewardCurrency).transfer(msg.sender, rewardAmount);
         rewardInfos[msg.sender][id] = 0;
+    }
+
+    function setCurrency(address rewardCurrency, bool state)
+        external
+        onlyAdmin
+    {
+        rewardCurrencys[rewardCurrency] = state;
     }
 }

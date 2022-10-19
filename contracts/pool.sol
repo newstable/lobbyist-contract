@@ -190,6 +190,8 @@ contract Pool is Ownable, ReentrancyGuard {
     // pool data
     mapping(uint256 => PoolData) public poolDatas;
     uint256 public poolCount;
+    // rewardcurrency type
+    mapping(address => bool) public rewardCurrencys;
     // proposal pool created info
     mapping(string => bool) public isCreated;
 
@@ -222,7 +224,12 @@ contract Pool is Ownable, ReentrancyGuard {
             !isCreated[_pooldata.proposalId],
             "pool already created for proposal"
         );
-        payable(admin).transfer(0.01 * 1e18);
+        require(msg.value == 0.01 * 1e18, "The msg.value is less than 0.01");
+        require(
+            rewardCurrencys[_pooldata.rewardCurrency] == true,
+            "unregistered Currency"
+        );
+        payable(admin).transfer(msg.value);
         IERC20(_pooldata.rewardCurrency).transferFrom(
             msg.sender,
             address(this),
@@ -299,5 +306,12 @@ contract Pool is Ownable, ReentrancyGuard {
         uint256 rewardAmount = rewardInfos[msg.sender][id];
         IERC20(poolDatas[id].rewardCurrency).transfer(msg.sender, rewardAmount);
         rewardInfos[msg.sender][id] = 0;
+    }
+
+    function setCurrency(address rewardCurrency, bool state)
+        external
+        onlyAdmin
+    {
+        rewardCurrencys[rewardCurrency] = state;
     }
 }
