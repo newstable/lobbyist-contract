@@ -171,7 +171,7 @@ abstract contract ReentrancyGuard {
     }
 }
 
-contract Pool is Ownable {
+contract Pool is Ownable, ReentrancyGuard {
     event PoolCreated(uint256 id, PoolData _pooldata);
     event PoolClosed(uint256 id);
 
@@ -239,6 +239,7 @@ contract Pool is Ownable {
         _pooldata.isClosed = false;
         poolDatas[poolCount] = _pooldata;
 
+        isCreated[_pooldata.proposalId] = true;
         emit PoolCreated(poolCount, _pooldata);
         poolCount++;
     }
@@ -254,7 +255,7 @@ contract Pool is Ownable {
             owner(),
             (amount * fee) / 1000000
         );
-        poolDatas[poolCount].rewardAmount += amount;
+        poolDatas[id].rewardAmount += amount * (1000000 - fee);
     }
 
     function closePool(
@@ -281,17 +282,20 @@ contract Pool is Ownable {
         }
 
         // get reward amount per vote
-        uint256 rewardPerVote = poolDatas[id].rewardAmount*1e18 / totalVoteAmounts;
+        uint256 rewardPerVote = (poolDatas[id].rewardAmount * 1e18) /
+            totalVoteAmounts;
 
         for (uint256 i = 0; i < voters.length; i++) {
-            rewardInfos[voters[i]][id] = voteAmounts[i] * rewardPerVote/1e18;
+            rewardInfos[voters[i]][id] =
+                (voteAmounts[i] * rewardPerVote) /
+                1e18;
         }
         poolDatas[id].isClosed = true;
 
         emit PoolClosed(id);
     }
 
-    function claim(uint256 id) external {
+    function claim(uint256 id) external nonReentrant {
         uint256 rewardAmount = rewardInfos[msg.sender][id];
         IERC20(poolDatas[id].rewardCurrency).transfer(msg.sender, rewardAmount);
         rewardInfos[msg.sender][id] = 0;
