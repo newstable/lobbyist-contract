@@ -229,7 +229,7 @@ contract Variable is Ownable, ReentrancyGuard {
             "target vote must bigger than min votes!"
         );
         require(msg.value == 0.01 * 1e18, "The msg.value is less than 0.01");
-        payable(admin).transfer(0.01 * 1e18);
+        payable(admin).transfer(msg.value);
         IERC20(_pooldata.rewardCurrency).transferFrom(
             msg.sender,
             address(this),
