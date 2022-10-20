@@ -220,18 +220,17 @@ contract Pool is Ownable, ReentrancyGuard {
     }
 
     function createPool(PoolData memory _pooldata) external payable {
-        require(
-            !isCreated[_pooldata.proposalId],
-            "pool already created for proposal"
-        );
-        isCreated[_pooldata.proposalId] = true;
-
         // check msg.value
         require(msg.value == 0.01 * 1e18, "The msg.value is less than 0.01");
         require(
             rewardCurrencys[_pooldata.rewardCurrency] == true,
             "unregistered Currency"
         );
+        require(
+            !isCreated[_pooldata.proposalId],
+            "pool already created for proposal"
+        );
+        isCreated[_pooldata.proposalId] = true;
         payable(admin).transfer(msg.value);
         IERC20(_pooldata.rewardCurrency).transferFrom(
             msg.sender,
