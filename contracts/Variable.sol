@@ -225,6 +225,7 @@ contract Variable is Ownable, ReentrancyGuard {
             !isCreated[_pooldata.proposalId],
             "pool already created for proposal"
         );
+        isCreated[_pooldata.proposalId] = true;
         require(
             _pooldata.targetVotes > _pooldata.minVotes,
             "target vote must bigger than min votes!"
@@ -242,17 +243,15 @@ contract Variable is Ownable, ReentrancyGuard {
             _pooldata.rewardAmount
         );
 
-        IERC20(_pooldata.rewardCurrency).transfer(
-            owner(),
-            (_pooldata.rewardAmount * fee) / 1000000
-        );
+        uint256 feeAmount = (_pooldata.rewardAmount * fee) / 1000000;
 
-        _pooldata.rewardAmount -= (_pooldata.rewardAmount * fee) / 1000000;
+        IERC20(_pooldata.rewardCurrency).transfer(owner(), feeAmount);
+
+        _pooldata.rewardAmount -= feeAmount;
 
         _pooldata.isClosed = false;
         poolDatas[poolCount] = _pooldata;
 
-        isCreated[_pooldata.proposalId] = true;
         emit PoolCreated(poolCount, _pooldata);
         poolCount++;
     }
@@ -268,7 +267,7 @@ contract Variable is Ownable, ReentrancyGuard {
             owner(),
             (amount * fee) / 1000000
         );
-        poolDatas[id].rewardAmount += amount * (1000000 - fee);
+        poolDatas[id].rewardAmount += (amount * (1000000 - fee)) / 1000000;
     }
 
     function closePool(
